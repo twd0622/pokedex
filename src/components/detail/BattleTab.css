@@ -4,6 +4,9 @@
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 16px 18px;
+  /* 좁은 화면에서 표가 넘치면 상자 안에서만 가로로 스크롤 */
+  min-width: 0;
+  overflow-x: auto;
 }
 
 .panel h3 {
