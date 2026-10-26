@@ -102,6 +102,23 @@ export async function fetchMoves(pokemonId, versionGroupId, method) {
   return data.pokemonmove
 }
 
+const ENCOUNTERS_QUERY = `query Encounters($pokemonId: Int!) {
+  encounter(
+    where: {pokemon_id: {_eq: $pokemonId}}
+    distinct_on: [version_id, location_area_id, encounter_slot_id]
+  ) {
+    version { id name versionnames(where: ${KO}) { name } versiongroup { order } }
+    locationarea { location { name locationnames(where: ${KO}) { name } } }
+    encounterslot { encountermethod { name } }
+  }
+}`
+
+// 게임별로 야생에서 만나는 장소를 받는다.
+export async function fetchEncounters(pokemonId) {
+  const data = await gql(ENCOUNTERS_QUERY, { pokemonId })
+  return data.encounter
+}
+
 // 포켓몬 한 종의 상세 정보와 모든 모습을 받는다. 없는 번호면 null.
 export async function fetchPokemonDetail(id) {
   const data = await gql(DETAIL_QUERY, { id })

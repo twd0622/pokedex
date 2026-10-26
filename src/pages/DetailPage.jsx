@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router'
 import { fetchPokemonDetail } from '../api/pokemon'
 import BattleTab from '../components/detail/BattleTab'
+import DetailsTab from '../components/detail/DetailsTab'
 import EvolutionTab from '../components/detail/EvolutionTab'
 import Hero from '../components/detail/Hero'
 import MovesTab from '../components/detail/MovesTab'
@@ -94,7 +95,7 @@ function DetailPage() {
         <EvolutionTab detail={detail} selectedFormIndex={formIndex} onSelectForm={selectForm} />
       )}
       {activeTab === 'moves' && <MovesTab pokemonId={form.pokemonId} />}
-      {activeTab === 'details' && <p className="status">준비 중이에요.</p>}
+      {activeTab === 'details' && <DetailsTab detail={detail} pokemonId={form.pokemonId} />}
     </>
   )
 }
