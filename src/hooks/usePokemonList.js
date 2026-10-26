@@ -17,8 +17,6 @@ export function usePokemonList() {
 
     // 화면이 사라진 뒤에 응답이 오면 무시하기 위한 표시
     let ignore = false
-    setLoading(true)
-    setError(null)
 
     fetchPokemonList()
       .then((raw) => {
@@ -39,7 +37,12 @@ export function usePokemonList() {
     }
   }, [attempt, list.length])
 
-  const retry = () => setAttempt((n) => n + 1)
+  // 로딩·오류 상태는 버튼을 누른 순간(이벤트)에 바꾸고, effect는 요청만 담당한다.
+  const retry = () => {
+    setError(null)
+    setLoading(true)
+    setAttempt((n) => n + 1)
+  }
 
   return { list, loading, error, retry }
 }
