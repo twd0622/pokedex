@@ -87,3 +87,18 @@ export function normalizeDetail(species) {
     forms,
   }
 }
+
+// 한국어 모습 이름이 없을 때 form_name으로 정하는 이름
+const FORM_NAMES = {
+  gmax: '거다이맥스',
+  alola: '알로라의 모습',
+  galar: '가라르의 모습',
+  hisui: '히스이의 모습',
+  paldea: '팔데아의 모습',
+}
+
+// 모습 카드에 쓸 이름
+export function formLabel(form) {
+  if (form.isDefault) return '기본'
+  return form.koFormName ?? FORM_NAMES[form.formName] ?? form.formName
+}

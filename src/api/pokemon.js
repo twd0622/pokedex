@@ -46,6 +46,28 @@ const DETAIL_QUERY = `query Detail($id: Int!) {
   }
 }`
 
+const EVOLUTION_QUERY = `query Evolution($id: Int!) {
+  evolutionchain(where: {id: {_eq: $id}}) {
+    pokemonspecies(order_by: {order: asc}) {
+      id
+      evolves_from_species_id
+      pokemonspeciesnames(where: ${KO}) { name }
+      pokemonevolutions {
+        min_level min_happiness min_affection time_of_day
+        evolutiontrigger { name }
+        item { itemnames(where: ${KO}) { name } }
+        move { movenames(where: ${KO}) { name } }
+      }
+    }
+  }
+}`
+
+// 진화 계열에 속한 종들과 진화 조건을 받는다.
+export async function fetchEvolutionChain(chainId) {
+  const data = await gql(EVOLUTION_QUERY, { id: chainId })
+  return data.evolutionchain[0]?.pokemonspecies ?? []
+}
+
 // 포켓몬 한 종의 상세 정보와 모든 모습을 받는다. 없는 번호면 null.
 export async function fetchPokemonDetail(id) {
   const data = await gql(DETAIL_QUERY, { id })

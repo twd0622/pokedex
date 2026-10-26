@@ -1,0 +1,97 @@
+.evolution-tab {
+  display: grid;
+  gap: 12px;
+}
+
+.evolution {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.evolution__stage {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.evolution__arrow {
+  color: var(--muted);
+  font-size: 20px;
+}
+
+.evolution__pokemon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 110px;
+  padding: 6px;
+  border-radius: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.evolution__pokemon:hover {
+  background: var(--chip);
+}
+
+.evolution__pokemon.is-current {
+  font-weight: 700;
+  background: #fdeee7;
+}
+
+.evolution__pokemon img {
+  object-fit: contain;
+}
+
+.evolution__pokemon small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+/* 이브이처럼 한 단계에 많으면 2열로 */
+.evolution__stage:has(> :nth-child(4)) {
+  display: grid;
+  grid-template-columns: repeat(2, 110px);
+}
+
+.evolution__none {
+  margin: 0;
+  color: var(--muted);
+}
+
+.forms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.forms__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 132px;
+  padding: 10px 6px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.forms__card.is-selected {
+  border-color: var(--accent);
+}
+
+.forms__card img {
+  object-fit: contain;
+}
+
+.forms__types {
+  display: flex;
+  gap: 4px;
+}

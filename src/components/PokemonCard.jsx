@@ -11,7 +11,7 @@ function PokemonCard({ pokemon }) {
     // state: 상세 페이지가 "목록에서 왔다"는 걸 알 수 있게 지금 주소의 검색 조건을 실어 보낸다.
     <Link
       to={`/pokemon/${pokemon.id}`}
-      state={{ fromList: location.search }}
+      state={{ fromList: location.search, depth: 1 }}
       className="pokemon-card"
     >
       <img

@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router'
 import { fetchPokemonDetail } from '../api/pokemon'
 import BattleTab from '../components/detail/BattleTab'
+import EvolutionTab from '../components/detail/EvolutionTab'
 import Hero from '../components/detail/Hero'
 import Tabs from '../components/detail/Tabs'
 import { useAsync } from '../hooks/useAsync'
@@ -14,6 +16,7 @@ async function loadDetail(id) {
 }
 
 // 목록에서 왔으면 브라우저 「뒤로」처럼 돌아가서 필터와 스크롤 위치를 지킨다.
+// depth는 목록 이후 상세 페이지를 몇 개 거쳤는지다. (진화 단계를 누르면 1씩 늘어난다)
 // 주소를 직접 열었으면 목록 첫 화면으로 간다.
 function BackLink() {
   const location = useLocation()
@@ -21,7 +24,11 @@ function BackLink() {
 
   if (location.state?.fromList !== undefined) {
     return (
-      <button type="button" className="back-link" onClick={() => navigate(-1)}>
+      <button
+        type="button"
+        className="back-link"
+        onClick={() => navigate(-(location.state.depth ?? 1))}
+      >
         ← 도감으로 돌아가기
       </button>
     )
@@ -54,6 +61,12 @@ function DetailPage() {
   const changeTab = (tab) =>
     setSearchParams({ tab }, { replace: true, state: location.state })
 
+  // 선택한 모습. 어느 포켓몬에서 고른 것인지(id)도 함께 기억해서,
+  // 다른 포켓몬으로 이동하면 자동으로 기본 모습(0)이 된다.
+  const [formChoice, setFormChoice] = useState({ id, index: 0 })
+  const formIndex = formChoice.id === id ? formChoice.index : 0
+  const selectForm = (index) => setFormChoice({ id, index })
+
   if (id === null) return <NotFound />
   if (loading) return <p className="status">불러오는 중…</p>
   if (error) {
@@ -68,7 +81,7 @@ function DetailPage() {
   }
   if (!detail) return <NotFound />
 
-  const form = detail.forms[0]
+  const form = detail.forms[formIndex] ?? detail.forms[0]
 
   return (
     <>
@@ -76,7 +89,12 @@ function DetailPage() {
       <Hero detail={detail} form={form} />
       <Tabs tabs={TABS} active={activeTab} onChange={changeTab} />
       {activeTab === 'battle' && <BattleTab form={form} />}
-      {activeTab !== 'battle' && <p className="status">준비 중이에요.</p>}
+      {activeTab === 'evolution' && (
+        <EvolutionTab detail={detail} selectedFormIndex={formIndex} onSelectForm={selectForm} />
+      )}
+      {(activeTab === 'moves' || activeTab === 'details') && (
+        <p className="status">준비 중이에요.</p>
+      )}
     </>
   )
 }

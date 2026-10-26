@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { normalizeDetail, normalizeList, parsePokemonId } from './normalize'
+import { formLabel, normalizeDetail, normalizeList, parsePokemonId } from './normalize'
 
 // 목록 쿼리 응답에서 리자몽 한 마리만 떼어 온 모양
 const rawCharizard = {
@@ -164,5 +164,24 @@ describe('normalizeDetail', () => {
     expect(detail.forms[1].formName).toBe('mega-x')
     expect(detail.forms[1].koFormName).toBe('메가리자몽X')
     expect(detail.forms[0].koFormName).toBeNull()
+  })
+})
+
+describe('formLabel', () => {
+  const form = (fields) => ({ isDefault: false, formName: '', koFormName: null, ...fields })
+
+  it('기본 모습', () => {
+    expect(formLabel(form({ isDefault: true }))).toBe('기본')
+  })
+
+  it('한국어 모습 이름이 있으면 그대로', () => {
+    expect(formLabel(form({ formName: 'mega-x', koFormName: '메가리자몽X' }))).toBe('메가리자몽X')
+  })
+
+  it('한국어 이름이 없으면 form_name으로 정한다', () => {
+    expect(formLabel(form({ formName: 'gmax' }))).toBe('거다이맥스')
+    expect(formLabel(form({ formName: 'alola' }))).toBe('알로라의 모습')
+    expect(formLabel(form({ formName: 'hisui' }))).toBe('히스이의 모습')
+    expect(formLabel(form({ formName: 'something-new' }))).toBe('something-new')
   })
 })
