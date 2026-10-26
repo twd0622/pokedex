@@ -53,10 +53,16 @@ function normalizeForm(pokemon) {
     weightKg: pokemon.weight / 10,
     types: pokemon.pokemontypes.map((t) => t.type.name),
     stats,
-    abilities: pokemon.pokemonabilities.map((a) => ({
-      name: a.ability.abilitynames[0]?.name ?? '',
-      description: cleanText(a.ability.abilityflavortexts[0]?.flavor_text ?? ''),
-      isHidden: a.is_hidden,
+    // 최신 특성은 한국어 번역이 없는 경우가 있어서 영어로 대체한다.
+    abilities: pokemon.pokemonabilities.map(({ ability, is_hidden }) => ({
+      name: ability.abilitynames[0]?.name ?? ability.abilitynames_en?.[0]?.name ?? '',
+      description:
+        cleanText(
+          ability.abilityflavortexts[0]?.flavor_text ??
+            ability.abilityflavortexts_en?.[0]?.flavor_text ??
+            '',
+        ) || '설명이 없어요.',
+      isHidden: is_hidden,
     })),
   }
 }

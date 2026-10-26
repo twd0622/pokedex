@@ -19,6 +19,8 @@ export async function fetchPokemonList() {
 
 // 한국어만 고르는 조건. 여러 곳에서 반복돼서 이름을 붙였다.
 const KO = '{language: {name: {_eq: "ko"}}}'
+// 한국어 번역이 없을 때 대신 쓸 영어
+const EN = '{language: {name: {_eq: "en"}}}'
 
 const DETAIL_QUERY = `query Detail($id: Int!) {
   pokemonspecies(where: {id: {_eq: $id}}) {
@@ -39,6 +41,8 @@ const DETAIL_QUERY = `query Detail($id: Int!) {
         ability {
           abilitynames(where: ${KO}) { name }
           abilityflavortexts(where: ${KO}, order_by: {version_group_id: desc}, limit: 1) { flavor_text }
+          abilitynames_en: abilitynames(where: ${EN}) { name }
+          abilityflavortexts_en: abilityflavortexts(where: ${EN}, order_by: {version_group_id: desc}, limit: 1) { flavor_text }
         }
       }
       pokemonforms { form_name pokemonformnames(where: ${KO}) { name } }

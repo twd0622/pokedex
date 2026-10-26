@@ -30,6 +30,11 @@ describe('listCache', () => {
     expect(readListCache(storage)).toBeNull()
   })
 
+  it('예전 형식처럼 항목 모양이 다르면 null', () => {
+    const old = JSON.stringify([{ id: 1, name: '이상해씨' }])
+    expect(readListCache(fakeStorage({ 'pokedex:list:v1': old }))).toBeNull()
+  })
+
   it('배열이 아니거나 비어 있으면 null', () => {
     expect(readListCache(fakeStorage({ 'pokedex:list:v1': '{"a":1}' }))).toBeNull()
     expect(readListCache(fakeStorage({ 'pokedex:list:v1': '[]' }))).toBeNull()

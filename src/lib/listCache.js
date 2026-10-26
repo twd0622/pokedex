@@ -2,10 +2,22 @@
 // 저장 형식을 바꾸게 되면 키 끝의 v1을 v2로 올려서 예전 값을 무시한다.
 const CACHE_KEY = 'pokedex:list:v1'
 
+// 화면이 쓰는 모양 { id, name, generation, types }인지 확인한다.
+// 모양이 다른 값을 그대로 쓰면 카드를 그리다가 앱 전체가 멈춘다.
+function isSummary(item) {
+  return (
+    typeof item?.id === 'number' &&
+    typeof item.name === 'string' &&
+    typeof item.generation === 'number' &&
+    Array.isArray(item.types)
+  )
+}
+
 export function readListCache(storage) {
   try {
     const list = JSON.parse(storage.getItem(CACHE_KEY))
     if (!Array.isArray(list) || list.length === 0) return null
+    if (!list.every(isSummary)) return null
     return list
   } catch {
     // 깨진 값이면 없는 것으로 친다.

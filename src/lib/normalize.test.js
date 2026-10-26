@@ -185,3 +185,40 @@ describe('formLabel', () => {
     expect(formLabel(form({ formName: 'something-new' }))).toBe('something-new')
   })
 })
+
+describe('normalizeDetail 특성의 영어 대체', () => {
+  // 9세대 특성처럼 한국어 이름·설명이 없는 경우
+  const windRider = {
+    is_hidden: false,
+    ability: {
+      abilitynames: [],
+      abilityflavortexts: [],
+      abilitynames_en: [{ name: 'Wind Rider' }],
+      abilityflavortexts_en: [{ flavor_text: 'Boosts Attack if\nhit by a wind move.' }],
+    },
+  }
+  const raw = {
+    ...rawCharizardDetail,
+    pokemons: [{ ...charizardForm, pokemonabilities: [windRider] }],
+  }
+
+  it('한국어가 없으면 영어 이름과 설명을 쓴다', () => {
+    expect(normalizeDetail(raw).forms[0].abilities[0]).toEqual({
+      name: 'Wind Rider',
+      description: 'Boosts Attack if hit by a wind move.',
+      isHidden: false,
+    })
+  })
+
+  it('영어 설명도 없으면 안내 문구', () => {
+    const noText = {
+      ...windRider,
+      ability: { ...windRider.ability, abilityflavortexts_en: [] },
+    }
+    const detail = normalizeDetail({
+      ...rawCharizardDetail,
+      pokemons: [{ ...charizardForm, pokemonabilities: [noText] }],
+    })
+    expect(detail.forms[0].abilities[0].description).toBe('설명이 없어요.')
+  })
+})
