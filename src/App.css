@@ -3,3 +3,20 @@
   margin: 0 auto;
   padding: 24px 16px 64px;
 }
+
+.status {
+  padding: 48px 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+.status button {
+  margin-top: 8px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  background: var(--ink);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
