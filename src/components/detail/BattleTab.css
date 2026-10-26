@@ -1,0 +1,104 @@
+/* .panel은 상세 탭들이 함께 쓰는 흰 상자 */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.panel h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+
+.panel__sub {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.battle-tab {
+  display: grid;
+  gap: 12px;
+}
+
+.battle-tab__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.stat {
+  display: grid;
+  grid-template-columns: 72px 40px 1fr;
+  gap: 8px;
+  align-items: center;
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.stat__bar {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--chip);
+  overflow: hidden;
+}
+
+.stat__bar i {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  background: var(--accent);
+}
+
+.ability + .ability {
+  margin-top: 12px;
+}
+
+.ability__name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.ability__hidden {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--chip);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.ability p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.matchup {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 6px 0;
+}
+
+.matchup__label {
+  width: 32px;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.matchup__types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+@media (max-width: 720px) {
+  .battle-tab__row {
+    grid-template-columns: 1fr;
+  }
+}

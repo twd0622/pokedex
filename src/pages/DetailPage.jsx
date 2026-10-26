@@ -1,6 +1,8 @@
-import { Link, useLocation, useNavigate, useParams } from 'react-router'
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router'
 import { fetchPokemonDetail } from '../api/pokemon'
+import BattleTab from '../components/detail/BattleTab'
 import Hero from '../components/detail/Hero'
+import Tabs from '../components/detail/Tabs'
 import { useAsync } from '../hooks/useAsync'
 import { normalizeDetail, parsePokemonId } from '../lib/normalize'
 import NotFound from './NotFound'
@@ -31,10 +33,26 @@ function BackLink() {
   )
 }
 
+const TABS = [
+  { id: 'battle', label: '배틀' },
+  { id: 'evolution', label: '진화·모습' },
+  { id: 'moves', label: '기술' },
+  { id: 'details', label: '세부 데이터' },
+]
+
 function DetailPage() {
   const params = useParams()
   const id = parsePokemonId(params.id)
   const { data: detail, loading, error, retry } = useAsync(() => loadDetail(id), [id])
+
+  // 선택한 탭은 주소(?tab=moves)에 둔다. 없거나 이상한 값이면 배틀 탭.
+  const [searchParams, setSearchParams] = useSearchParams()
+  const tabParam = searchParams.get('tab')
+  const activeTab = TABS.some((t) => t.id === tabParam) ? tabParam : 'battle'
+  // state: 탭을 바꿔도 "목록에서 왔다"는 쪽지(fromList)를 잃지 않게 그대로 넘긴다.
+  const location = useLocation()
+  const changeTab = (tab) =>
+    setSearchParams({ tab }, { replace: true, state: location.state })
 
   if (id === null) return <NotFound />
   if (loading) return <p className="status">불러오는 중…</p>
@@ -50,10 +68,15 @@ function DetailPage() {
   }
   if (!detail) return <NotFound />
 
+  const form = detail.forms[0]
+
   return (
     <>
       <BackLink />
-      <Hero detail={detail} form={detail.forms[0]} />
+      <Hero detail={detail} form={form} />
+      <Tabs tabs={TABS} active={activeTab} onChange={changeTab} />
+      {activeTab === 'battle' && <BattleTab form={form} />}
+      {activeTab !== 'battle' && <p className="status">준비 중이에요.</p>}
     </>
   )
 }
