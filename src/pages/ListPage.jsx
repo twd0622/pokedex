@@ -1,17 +1,39 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { useSearchParams } from 'react-router'
 import Header from '../components/Header'
 import PokemonGrid from '../components/PokemonGrid'
 import Sidebar from '../components/Sidebar'
+import { GENERATIONS } from '../data/generations'
+import { TYPES } from '../data/types'
 import { usePokemonList } from '../hooks/usePokemonList'
 import { filterPokemon } from '../lib/filter'
 import './ListPage.css'
 
-// 목록 화면 전체. 검색어와 필터 상태를 여기서 가지고 자식에게 나눠 준다.
+// 목록 화면 전체. 검색어와 필터는 주소의 쿼리(?q=리자&gen=1&type=fire)에 둔다.
+// 그래서 상세 페이지에 갔다가 돌아와도, 새로고침해도 조건이 남아 있다.
 function ListPage() {
   const { list, loading, error, retry } = usePokemonList()
-  const [query, setQuery] = useState('')
-  const [generation, setGeneration] = useState(null)
-  const [type, setType] = useState(null)
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  // 주소의 글자를 읽어서 쓸 수 있는 값만 받아들인다. 이상한 값은 「전체」로 친다.
+  const query = searchParams.get('q') ?? ''
+  const genParam = Number(searchParams.get('gen'))
+  const generation = GENERATIONS.some((g) => g.id === genParam) ? genParam : null
+  const typeParam = searchParams.get('type')
+  const type = typeParam in TYPES ? typeParam : null
+
+  // 쿼리 하나를 바꾼다. 빈 값이면 주소에서 지운다.
+  // replace: 글자를 칠 때마다 방문 기록이 쌓이지 않게 한다.
+  function updateParam(name, value) {
+    const next = new URLSearchParams(searchParams)
+    if (value === null || value === '') next.delete(name)
+    else next.set(name, String(value))
+    setSearchParams(next, { replace: true })
+  }
+
+  const setQuery = (value) => updateParam('q', value)
+  const setGeneration = (value) => updateParam('gen', value)
+  const setType = (value) => updateParam('type', value)
 
   // 목록이나 조건이 바뀔 때만 다시 거른다.
   const filtered = useMemo(
