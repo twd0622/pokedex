@@ -1,0 +1,28 @@
+/* 앱 전체에서 쓰는 색상 변수와 기본 스타일 */
+:root {
+  --accent: #e3350d;
+  --bg: #f4f5f7;
+  --panel: #ffffff;
+  --ink: #1d2433;
+  --muted: #6b7385;
+  --line: #e2e5eb;
+  --chip: #eef0f4;
+
+  font-family: 'Pretendard', 'Malgun Gothic', system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
