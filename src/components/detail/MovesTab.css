@@ -1,0 +1,44 @@
+.moves-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.moves-filters label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.moves-filters select {
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+}
+
+/* 표 공통 스타일. 세부 데이터 탭의 출현 장소 표도 함께 쓴다. */
+.moves-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.moves-table th,
+.moves-table td {
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.moves-table th {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+}

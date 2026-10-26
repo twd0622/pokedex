@@ -21,6 +21,14 @@ export const HABITATS = {
   'waters-edge': '물가',
 }
 
+// 기술을 배우는 방법. 이 4가지만 보여 주고, 적힌 순서가 메뉴 순서다.
+export const LEARN_METHODS = {
+  'level-up': '레벨업',
+  machine: '기술머신',
+  egg: '알 기술',
+  tutor: '가르침',
+}
+
 // 능력치 6종. 화면에 보여 줄 순서이기도 하다.
 export const STAT_LABELS = {
   hp: 'HP',

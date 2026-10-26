@@ -68,6 +68,40 @@ export async function fetchEvolutionChain(chainId) {
   return data.evolutionchain[0]?.pokemonspecies ?? []
 }
 
+const MOVE_VERSIONS_QUERY = `query MoveVersions($pokemonId: Int!) {
+  pokemonmove(
+    where: {pokemon_id: {_eq: $pokemonId}}
+    distinct_on: [version_group_id, move_learn_method_id]
+  ) {
+    version_group_id
+    movelearnmethod { name }
+    versiongroup { order versions { name versionnames(where: ${KO}) { name } } }
+  }
+}`
+
+// 이 포켓몬(모습)이 기술을 배우는 (버전 그룹, 방법) 쌍을 모두 받는다.
+export async function fetchMoveVersionGroups(pokemonId) {
+  const data = await gql(MOVE_VERSIONS_QUERY, { pokemonId })
+  return data.pokemonmove
+}
+
+const MOVES_QUERY = `query Moves($pokemonId: Int!, $versionGroupId: Int!, $method: String!) {
+  pokemonmove(where: {
+    pokemon_id: {_eq: $pokemonId}
+    version_group_id: {_eq: $versionGroupId}
+    movelearnmethod: {name: {_eq: $method}}
+  }) {
+    level
+    move { power accuracy type { name } movenames(where: ${KO}) { name } }
+  }
+}`
+
+// 한 버전에서 한 가지 방법으로 배우는 기술 목록을 받는다.
+export async function fetchMoves(pokemonId, versionGroupId, method) {
+  const data = await gql(MOVES_QUERY, { pokemonId, versionGroupId, method })
+  return data.pokemonmove
+}
+
 // 포켓몬 한 종의 상세 정보와 모든 모습을 받는다. 없는 번호면 null.
 export async function fetchPokemonDetail(id) {
   const data = await gql(DETAIL_QUERY, { id })

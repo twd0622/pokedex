@@ -4,6 +4,7 @@ import { fetchPokemonDetail } from '../api/pokemon'
 import BattleTab from '../components/detail/BattleTab'
 import EvolutionTab from '../components/detail/EvolutionTab'
 import Hero from '../components/detail/Hero'
+import MovesTab from '../components/detail/MovesTab'
 import Tabs from '../components/detail/Tabs'
 import { useAsync } from '../hooks/useAsync'
 import { normalizeDetail, parsePokemonId } from '../lib/normalize'
@@ -92,9 +93,8 @@ function DetailPage() {
       {activeTab === 'evolution' && (
         <EvolutionTab detail={detail} selectedFormIndex={formIndex} onSelectForm={selectForm} />
       )}
-      {(activeTab === 'moves' || activeTab === 'details') && (
-        <p className="status">준비 중이에요.</p>
-      )}
+      {activeTab === 'moves' && <MovesTab pokemonId={form.pokemonId} />}
+      {activeTab === 'details' && <p className="status">준비 중이에요.</p>}
     </>
   )
 }
